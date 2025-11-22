@@ -1,4 +1,5 @@
 "use client";
+import { useState } from "react";
 import { Bell, Phone, Package, Calculator } from "lucide-react";
 
 interface HeaderProps {
@@ -14,6 +15,16 @@ export default function Header({
   onCotizarClick,
   onNotificacionesClick 
 }: HeaderProps) {
+
+  const [activo, setActivo] = useState<"reservas" | "contactanos" | "cotizar" | "notificaciones">("reservas");
+
+  const base =
+    "flex items-center gap-2 px-4 py-2 border rounded-full transition-colors shrink-0";
+  const normal =
+    "text-black hover:bg-amber-50 hover:border-amber-300";
+  const seleccionado =
+    "bg-orange-500 border-orange-500 text-white"; // <-- activo naranja
+
   return (
     <header className="w-full bg-white border-b border-zinc-200 px-6 py-4">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
@@ -21,7 +32,7 @@ export default function Header({
         {/* Título */}
         <div>
           <h1 className="text-xl font-semibold text-amber-700">
-            Papelería DORADO
+            FOTOCOPIAS y LIBRERÍA DORADO
           </h1>
           <p className="text-sm text-zinc-600">Todo en papelería y útiles</p>
         </div>
@@ -30,32 +41,32 @@ export default function Header({
         <div className="flex gap-3 whitespace-nowrap overflow-x-auto touch-pan-x scrollbar-hide">
 
           <button 
-            onClick={onReservasClick}
-            className="flex items-center gap-2 px-4 py-2 border rounded-full hover:bg-amber-50 hover:border-amber-300 transition-colors shrink-0 text-black"
+            onClick={() => { setActivo("reservas"); onReservasClick?.(); }}
+            className={`${base} ${activo === "reservas" ? seleccionado : normal}`}
           >
             <Package size={18} />
             Reservas
           </button>
 
           <button 
-            onClick={onContactanosClick}
-            className="flex items-center gap-2 px-4 py-2 border rounded-full hover:bg-amber-50 hover:border-amber-300 transition-colors shrink-0 text-black"
+            onClick={() => { setActivo("contactanos"); onContactanosClick?.(); }}
+            className={`${base} ${activo === "contactanos" ? seleccionado : normal}`}
           >
             <Phone size={18} />
             Contáctanos
           </button>
 
           <button 
-            onClick={onCotizarClick}
-            className="flex items-center gap-2 px-4 py-2 border rounded-full hover:bg-amber-50 hover:border-amber-300 transition-colors shrink-0 text-black"
+            onClick={() => { setActivo("cotizar"); onCotizarClick?.(); }}
+            className={`${base} ${activo === "cotizar" ? seleccionado : normal}`}
           >
             <Calculator size={18} />
             Cotizar
           </button>
 
           <button 
-            onClick={onNotificacionesClick}
-            className="flex items-center gap-2 px-4 py-2 border rounded-full hover:bg-amber-50 hover:border-amber-300 transition-colors shrink-0 text-black"
+            onClick={() => { setActivo("notificaciones"); onNotificacionesClick?.(); }}
+            className={`${base} ${activo === "notificaciones" ? seleccionado : normal}`}
           >
             <Bell size={18} />
             Notificaciones
