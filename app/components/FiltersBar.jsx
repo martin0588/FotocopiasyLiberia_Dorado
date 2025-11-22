@@ -2,55 +2,72 @@
 
 import { Star, Package } from "lucide-react";
 
-export default function FiltersBar() {
+export default function FiltersBar({
+  activeTopFilter,
+  setActiveTopFilter,
+  activeCategory,
+  setActiveCategory,
+}) {
+  const categories = [
+    "Todos",
+    "Cuadernos",
+    "Papel",
+    "Cartulinas",
+    "Útiles Escolares",
+    "Folders",
+    "Sobres",
+    "Combos",
+    "Archivadores",
+    "Accesorios",
+  ];
+
+  const baseBtn =
+    "px-4 py-1.5 rounded-md text-sm shadow-sm transition-colors shrink-0";
+  const activeBtn = "bg-amber-600 text-white font-semibold";
+  const normalBtn = "bg-zinc-100 border border-zinc-300 text-black";
+
   return (
     <div className="w-full bg-white border-b border-zinc-200 px-6 py-4">
-
-      {/* Nombre */}
-      <h2 className="text-lg font-semibold text-amber-700 mb-4">
-        Papelería DORADO
-      </h2>
-
       {/* Primera fila */}
       <div className="flex gap-3 flex-wrap mb-4">
-
-        {/* ACTIVO */}
-        <button className="px-4 py-1.5 rounded-md bg-amber-600 text-white text-sm font-semibold shadow-sm">
+        <button
+          onClick={() => setActiveTopFilter("todos")}
+          className={`${baseBtn} ${
+            activeTopFilter === "todos" ? activeBtn : normalBtn
+          }`}
+        >
           Todos
         </button>
 
-        <button className="flex items-center gap-2 px-4 py-1.5 rounded-md bg-zinc-100 border border-zinc-300 text-sm text-black shadow-sm">
+        <button
+          onClick={() => setActiveTopFilter("top")}
+          className={`flex items-center gap-2 ${baseBtn} ${
+            activeTopFilter === "top" ? activeBtn : normalBtn
+          }`}
+        >
           <Star size={16} className="text-yellow-500" />
           Más Vendidos
         </button>
 
-        <button className="flex items-center gap-2 px-4 py-1.5 rounded-md bg-zinc-100 border border-zinc-300 text-sm text-black shadow-sm">
+        <button
+          onClick={() => setActiveTopFilter("combos")}
+          className={`flex items-center gap-2 ${baseBtn} ${
+            activeTopFilter === "combos" ? activeBtn : normalBtn
+          }`}
+        >
           <Package size={16} className="text-amber-700" />
           Combos
         </button>
       </div>
 
-      {/* Segunda fila deslizable */}
+      {/* Segunda fila */}
       <div className="flex gap-3 overflow-x-auto scrollbar-hide whitespace-nowrap">
-
-        {[
-          "Todos",
-          "Cuadernos",
-          "Papel",
-          "Cartulinas",
-          "Útiles Escolares",
-          "Folders",
-          "Sobres",
-          "Combos",
-          "Archivadores",
-          "Accesorios",
-        ].map((category, index) => (
+        {categories.map((category) => (
           <button
-            key={index}
-            className={`inline-block px-4 py-1.5 rounded-md text-sm shadow-sm ${
-              category === "Todos"
-                ? "bg-amber-600 text-white font-semibold"
-                : "bg-zinc-100 border border-zinc-300 text-black"
+            key={category}
+            onClick={() => setActiveCategory(category)}
+            className={`${baseBtn} ${
+              activeCategory === category ? activeBtn : normalBtn
             }`}
           >
             {category}
