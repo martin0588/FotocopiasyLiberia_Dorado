@@ -1,41 +1,43 @@
 "use client";
+
 import { Bell, Phone, Package, Calculator } from "lucide-react";
 
 export default function Header() {
   return (
-    <header className="w-full bg-white border-b border-zinc-200 px-6 py-4">
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        
-        {/* Título */}
-        <div>
-          <h1 className="text-xl font-semibold text-amber-700">
-            Papelería DORADO
-          </h1>
-          <p className="text-sm text-zinc-600">Todo en papelería y útiles</p>
-        </div>
+    <header className="w-full bg-white border-b px-4 py-3">
 
-        {/* Botones */}
-        <div className="flex flex-wrap gap-3">
-          <button className="flex items-center gap-2 px-4 py-2 border rounded-full hover:bg-zinc-100">
-            <Package size={18} />
-            Reservas
-          </button>
+      {/* Título */}
+      <div className="mb-3">
+        <h1 className="text-lg font-semibold text-orange-700">
+          Papelería DORADO
+        </h1>
+        <p className="text-xs text-gray-500 -mt-1">
+          Todo en papelería y útiles
+        </p>
+      </div>
 
-          <button className="flex items-center gap-2 px-4 py-2 border rounded-full hover:bg-zinc-100">
-            <Phone size={18} />
-            Contáctanos
-          </button>
+      {/* Botones pequeños (móvil) */}
+      <div className="flex gap-2 overflow-x-auto no-scrollbar">
 
-          <button className="flex items-center gap-2 px-4 py-2 border rounded-full hover:bg-zinc-100">
-            <Calculator size={18} />
-            Cotizar
-          </button>
+        <button className="flex items-center gap-1 px-3 py-1 border rounded-full bg-white text-sm whitespace-nowrap">
+          <Package size={14} />
+          Reservas
+        </button>
 
-          <button className="flex items-center gap-2 px-4 py-2 border rounded-full hover:bg-zinc-100">
-            <Bell size={18} />
-            Notificaciones
-          </button>
-        </div>
+        <button className="flex items-center gap-1 px-3 py-1 border rounded-full bg-white text-sm whitespace-nowrap">
+          <Phone size={14} />
+          Contáctanos
+        </button>
+
+        <button className="flex items-center gap-1 px-3 py-1 border rounded-full bg-white text-sm whitespace-nowrap">
+          <Calculator size={14} />
+          Cotizar
+        </button>
+
+        <button className="flex items-center gap-1 px-3 py-1 border rounded-full bg-white text-sm whitespace-nowrap">
+          <Bell size={14} />
+          Notificaciones
+        </button>
       </div>
     </header>
   );
