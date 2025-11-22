@@ -20,8 +20,32 @@ import Buscar from "./components/Buscar";
 export default function Home() {
   const [activeView, setActiveView] = useState("home");
 
+  // ✅ filtro 1ra fila (Todos / Más Vendidos / Combos)
+  const [activeTopFilter, setActiveTopFilter] =
+    useState<"todos" | "top" | "combos">("todos");
+
+  // ✅ filtro 2da fila categorías
+  const [activeCategory, setActiveCategory] = useState("Todos");
+
+  // ✅ filtrar productos según lo que dice el botón
+  const filteredProducts = products.filter((p) => {
+    const byCategory =
+      activeCategory === "Todos" || p.category === activeCategory;
+
+    const byTopFilter =
+      activeTopFilter === "todos"
+        ? true
+        : activeTopFilter === "top"
+        ? p.isTop === true
+        : activeTopFilter === "combos"
+        ? p.category === "Combos" // ojo: si no tienes "Combos" en tu data, no mostrará nada
+        : true;
+
+    return byCategory && byTopFilter;
+  });
+
   return (
-    <div className="pb-20">
+    <div className="">
 
       {/* 🟧 SIEMPRE mostrar Header arriba */}
       <Header 
@@ -31,14 +55,21 @@ export default function Home() {
         onNotificacionesClick={() => setActiveView("notificaciones")}
       />
 
-      {/* ❌ Filtros solo en home */}
-      {activeView === "home" && <FiltersBar />}
+      {/* ✅ Filtros solo en home, ahora con props */}
+      {activeView === "home" && (
+        <FiltersBar
+          activeTopFilter={activeTopFilter}
+          setActiveTopFilter={setActiveTopFilter}
+          activeCategory={activeCategory}
+          setActiveCategory={setActiveCategory}
+        />
+      )}
 
       <main className={activeView === "home" ? "px-4 py-4" : ""}>
 
         {/* 🏠 HOME */}
         {activeView === "home" && (
-          <ProductsGrid products={products} />
+          <ProductsGrid products={filteredProducts} />
         )}
 
         {/* 🔎 BUSCAR */}
