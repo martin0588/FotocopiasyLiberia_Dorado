@@ -187,4 +187,102 @@ export const products = [
     image: "https://images.unsplash.com/photo-1513542789411-b6a5d4f31634?w=200",
     isTop: true,
   },
+  // =====================
+// ✅ COMBOS (5)
+// =====================
+{
+  id: 101,
+  title: "Combo Escolar Básico",
+  category: "Combos",
+  description: "1 cuaderno + 2 lapiceros + borrador",
+  price: 35.0,
+  image: "https://images.unsplash.com/photo-1519681393784-d120267933ba?w=200",
+  isTop: true,
+},
+{
+  id: 102,
+  title: "Combo Universitario",
+  category: "Combos",
+  description: "2 cuadernos universitarios + resaltadores + lapiceros",
+  price: 65.0,
+  image: "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=200",
+  isTop: true,
+},
+{
+  id: 103,
+  title: "Combo Oficina",
+  category: "Combos",
+  description: "Resma bond + folders + bolígrafos",
+  price: 90.0,
+  image: "https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?w=200",
+  isTop: false,
+},
+{
+  id: 104,
+  title: "Combo Arte y Dibujo",
+  category: "Combos",
+  description: "Cartulinas + colores + marcadores",
+  price: 75.0,
+  image: "https://images.unsplash.com/photo-1513364776144-60967b0f800f?w=200",
+  isTop: false,
+},
+{
+  id: 105,
+  title: "Combo Regreso a Clases",
+  category: "Combos",
+  description: "Cuaderno + carpeta + lápiz + borrador + regla",
+  price: 52.0,
+  image: "https://images.unsplash.com/photo-1516979187457-637abb4f9353?w=200",
+  isTop: true,
+},
+
+// =====================
+// ✅ SOBRES (5)
+// =====================
+{
+  id: 201,
+  title: "Sobre Manila Carta",
+  category: "Sobres",
+  description: "Sobre manila tamaño carta, ideal para documentos",
+  price: 3.5,
+  image: "https://images.unsplash.com/photo-1586075010923-2dd4570fb338?w=200",
+  isTop: true,
+},
+{
+  id: 202,
+  title: "Sobre Manila Oficio",
+  category: "Sobres",
+  description: "Sobre manila tamaño oficio, resistente",
+  price: 4.0,
+  image: "https://images.unsplash.com/photo-1605711285791-0219f24e2a17?w=200",
+  isTop: false,
+},
+{
+  id: 203,
+  title: "Sobre Blanco Carta",
+  category: "Sobres",
+  description: "Sobre blanco con pega, tamaño carta",
+  price: 2.0,
+  image: "https://images.unsplash.com/photo-1616628182506-1b8f1b2af0a8?w=200",
+  isTop: false,
+},
+{
+  id: 204,
+  title: "Sobre Kraft A4",
+  category: "Sobres",
+  description: "Sobre kraft ecológico tamaño A4",
+  price: 3.0,
+  image: "https://images.unsplash.com/photo-1517842645767-c639042777db?w=200",
+  isTop: true,
+},
+{
+  id: 205,
+  title: "Sobre de Seguridad (burbuja)",
+  category: "Sobres",
+  description: "Sobre acolchado para envíos delicados",
+  price: 8.0,
+  image: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=200",
+  isTop: true,
+},
+
 ];
