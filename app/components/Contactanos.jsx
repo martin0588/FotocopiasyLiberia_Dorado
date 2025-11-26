@@ -125,7 +125,7 @@ export default function Contactanos() {
           <div>
             <p className="text-sm font-medium text-amber-800 mb-1">Ubicación</p>
             <p className="text-xs text-amber-700 leading-relaxed">
-              Estamos ubicados en la ciudad de EL Alto, fácil acceso en transporte
+              Estamos ubicados en la ciudad de EL Alto cerca a la universidad UPEA, fácil acceso en transporte
               público. Te esperamos para brindarte la mejor atención.
             </p>
           </div>
