@@ -1,18 +1,9 @@
+// ...existing code...
+"use client";
+
 import { useState } from "react";
 import { Search, SlidersHorizontal, ArrowDownUp, Heart, ShoppingCart, X, Check } from "lucide-react";
-// En tu proyecto: import { products } from "../data/products";
-
-// Datos de ejemplo (en tu proyecto usa el import de arriba)
-const products = [
-  { id: 1, title: "Cuaderno Universitario 100 hojas", category: "Cuadernos", description: "Cuaderno universitario espiral, rayado", price: 15.5, image: "https://images.unsplash.com/photo-1531346878377-a5be20888e57?w=200", isTop: true },
-  { id: 2, title: "Cuaderno Empastado A4", category: "Cuadernos", description: "Cuaderno empastado tapa dura, 200 hojas", price: 28.0, image: "https://images.unsplash.com/photo-1517842645767-c639042777db?w=200", isTop: true },
-  { id: 3, title: "Cuaderno Anillado A5", category: "Cuadernos", description: "Cuaderno anillado tamaño A5, 80 hojas", price: 12.0, image: "https://images.unsplash.com/photo-1544816155-12df9643f363?w=200", isTop: false },
-  { id: 4, title: "Papel Bond Carta (Resma)", category: "Papel", description: "Resma de 500 hojas, papel bond blanco", price: 42.0, image: "https://images.unsplash.com/photo-1586075010923-2dd4570fb338?w=200", isTop: true },
-  { id: 5, title: "Papel Fotográfico Glossy A4", category: "Papel", description: "Pack 20 hojas papel fotográfico brillante", price: 85.0, image: "https://images.unsplash.com/photo-1589998059171-988d887df646?w=200", isTop: false },
-  { id: 6, title: "Papel Fotográfico Mate A4", category: "Papel", description: "Pack 20 hojas papel fotográfico acabado mate", price: 80.0, image: "https://images.unsplash.com/photo-1589998059171-988d887df646?w=200", isTop: false },
-  { id: 7, title: "Bolígrafos Pack x12", category: "Bolígrafos", description: "Pack 12 bolígrafos azul, negro y rojo", price: 18.0, image: "https://images.unsplash.com/photo-1585336261022-680e295ce3fe?w=200", isTop: true },
-  { id: 8, title: "Lápices HB Pack x10", category: "Lápices", description: "Pack 10 lápices grafito HB con borrador", price: 12.0, image: "https://images.unsplash.com/photo-1522111608460-19e7331e00fb?w=200", isTop: false },
-];
+import { products } from "../data/products";
 
 function BuscarItem({ product, onAddToCart, onToggleFavorito, modoComparar, seleccionado, onToggleComparar, isFavorito }) {
   const { id, image, title, category, description, price, isTop } = product;
@@ -66,7 +57,16 @@ function BuscarList({ products, onAddToCart, onToggleFavorito, modoComparar, sel
   return (
     <div className="flex flex-col gap-3">
       {products.map((product) => (
-        <BuscarItem key={product.id} product={product} onAddToCart={onAddToCart} onToggleFavorito={onToggleFavorito} modoComparar={modoComparar} seleccionado={seleccionados?.includes(product.id)} onToggleComparar={onToggleComparar} isFavorito={favoritos?.includes(product.id)} />
+        <BuscarItem
+          key={product.id}
+          product={product}
+          onAddToCart={onAddToCart}
+          onToggleFavorito={onToggleFavorito}
+          modoComparar={modoComparar}
+          seleccionado={seleccionados?.includes(product.id)}
+          onToggleComparar={onToggleComparar}
+          isFavorito={favoritos?.includes(product.id)}
+        />
       ))}
     </div>
   );
@@ -138,6 +138,7 @@ function FiltrosModal({ isOpen, onClose, filtros, setFiltros }) {
 }
 
 export default function Buscar() {
+  const [query, setQuery] = useState("");
   const [busqueda, setBusqueda] = useState("");
   const [mostrarFiltros, setMostrarFiltros] = useState(false);
   const [modoComparar, setModoComparar] = useState(false);
@@ -145,23 +146,41 @@ export default function Buscar() {
   const [favoritos, setFavoritos] = useState([]);
   const [filtros, setFiltros] = useState({ categorias: [], materiales: [], soloStock: false });
 
+  // Buscar por submit (Enter o botón)
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setBusqueda(query.trim());
+  };
+
   const productosFiltrados = products.filter((p) => {
-    const matchBusqueda = p.title.toLowerCase().includes(busqueda.toLowerCase()) || p.category.toLowerCase().includes(busqueda.toLowerCase());
+    const q = (busqueda || "").toLowerCase();
+    const matchBusqueda =
+      q === "" ||
+      p.title.toLowerCase().includes(q) ||
+      p.category.toLowerCase().includes(q) ||
+      (p.description && p.description.toLowerCase().includes(q));
     const matchCategoria = filtros.categorias.length === 0 || filtros.categorias.includes(p.category);
     return matchBusqueda && matchCategoria;
   });
 
-  const handleToggleFavorito = (id) => setFavoritos((prev) => prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id]);
+  const handleToggleFavorito = (id) => setFavoritos((prev) => (prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id]));
   const handleAddToCart = (id) => console.log("Agregado al carrito:", id);
-  const handleToggleComparar = (id) => setSeleccionados((prev) => prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id]);
+  const handleToggleComparar = (id) => setSeleccionados((prev) => (prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id]));
 
   return (
     <div className="min-h-screen bg-gray-100 pb-20">
       <div className="bg-white px-4 py-3 border-b border-gray-200">
-        <div className="relative">
+        <form onSubmit={handleSubmit} className="relative flex items-center gap-2">
           <Search size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-          <input type="text" value={busqueda} onChange={(e) => setBusqueda(e.target.value)} placeholder="Buscar productos..." className="w-full pl-10 pr-4 py-2.5 bg-gray-100 rounded-lg text-sm text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-amber-400" />
-        </div>
+          <input
+            type="text"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder="Buscar productos..."
+            className="w-full pl-10 pr-20 py-2.5 bg-gray-100 rounded-lg text-sm text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-amber-400"
+          />
+          <button type="submit" className="absolute right-3 px-3 py-1 bg-amber-500 text-white rounded-md text-sm">Buscar</button>
+        </form>
       </div>
 
       <div className="bg-white px-4 py-2 border-b border-gray-200 flex gap-3">
@@ -185,3 +204,4 @@ export default function Buscar() {
     </div>
   );
 }
+// ...existing code...
