@@ -66,7 +66,6 @@ export default function CarritoPage() {
 
   return (
     <div className="px-4 py-4 max-w-xl mx-auto text-gray-900">
-
       <div className="flex items-center gap-2 mb-3">
         <span className="text-orange-600 text-xl">🛒</span>
         <h1 className="text-lg font-bold">Mi Carrito</h1>
@@ -201,7 +200,6 @@ export default function CarritoPage() {
           </button>
         </div>
       )}
-
     </div>
   );
 }
