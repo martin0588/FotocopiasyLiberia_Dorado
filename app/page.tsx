@@ -38,7 +38,7 @@ export default function Home() {
         : activeTopFilter === "top"
         ? p.isTop === true
         : activeTopFilter === "combos"
-        ? p.category === "Combos"
+        ? p.category === "Combos" // ojo: si no tienes "Combos" en tu data, no mostrará nada
         : true;
 
     return byCategory && byTopFilter;
