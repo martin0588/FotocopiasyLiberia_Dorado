@@ -3,16 +3,15 @@
 import { useCart } from "./CartContext";
 import { Minus, Plus, Trash2 } from "lucide-react";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 
 export default function CarritoPage() {
   const { cart, addToCart, decreaseQty, removeFromCart, clearCart } = useCart();
   const [tab, setTab] = useState("carrito");
-  const router = useRouter();
+  const [solicitudTexto, setSolicitudTexto] = useState("");
 
   const total = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
 
-  // 👉 Crear reserva segura sin IDs repetidos
+  // 👉 Crear reserva desde productos del carrito
   const generarReserva = () => {
     if (cart.length === 0) return;
 
@@ -32,12 +31,41 @@ export default function CarritoPage() {
     localStorage.setItem("reservas", JSON.stringify(reservasGuardadas));
 
     clearCart();
-    router.push("/reservascar");
+    // ❌ Ya no redirige
+  };
+
+  // 👉 Crear reserva desde el tab “Reservar”
+  const generarSolicitudReserva = () => {
+    if (!solicitudTexto.trim()) return;
+
+    const reservasGuardadas = JSON.parse(localStorage.getItem("reservas") || "[]");
+
+    const nuevaReserva = {
+      id: `RES-${String(reservasGuardadas.length + 1).padStart(3, "0")}`,
+      fecha: new Date().toLocaleDateString(),
+      productos: [
+        {
+          title: "Solicitud personalizada",
+          qty: 1,
+          price: 0,
+          descripcion: solicitudTexto,
+        },
+      ],
+      total: 0,
+      estado: "Solicitud",
+      lugar: "Papelería DORADO",
+      direccion: "Av. Principal #123, Centro, La Paz",
+    };
+
+    reservasGuardadas.push(nuevaReserva);
+    localStorage.setItem("reservas", JSON.stringify(reservasGuardadas));
+
+    setSolicitudTexto("");
+    // ❌ Ya no redirige tampoco
   };
 
   return (
     <div className="px-4 py-4 max-w-xl mx-auto text-gray-900">
-      
       <div className="flex items-center gap-2 mb-3">
         <span className="text-orange-600 text-xl">🛒</span>
         <h1 className="text-lg font-bold">Mi Carrito</h1>
@@ -140,6 +168,12 @@ export default function CarritoPage() {
               </button>
             </div>
           )}
+
+          {cart.length === 0 && (
+            <div className="text-center text-gray-500 mt-6 text-sm">
+              Tu carrito está vacío.
+            </div>
+          )}
         </>
       )}
 
@@ -154,9 +188,14 @@ export default function CarritoPage() {
             className="w-full bg-gray-100 mt-2 p-3 rounded-lg text-sm focus:outline-none"
             rows={4}
             placeholder="Ej: 5 cuadernos de 100 hojas..."
+            value={solicitudTexto}
+            onChange={(e) => setSolicitudTexto(e.target.value)}
           />
 
-          <button className="w-full bg-orange-400 text-white font-semibold py-2 rounded-xl mt-4">
+          <button
+            onClick={generarSolicitudReserva}
+            className="w-full bg-orange-400 text-white font-semibold py-2 rounded-xl mt-4"
+          >
             Enviar Solicitud
           </button>
         </div>
