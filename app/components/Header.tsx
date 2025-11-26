@@ -55,15 +55,7 @@ export default function Header({
             <Phone size={18} />
             Contáctanos
           </button>
-
-          <button 
-            onClick={() => { setActivo("cotizar"); onCotizarClick?.(); }}
-            className={`${base} ${activo === "cotizar" ? seleccionado : normal}`}
-          >
-            <Calculator size={18} />
-            Cotizar
-          </button>
-
+          
           <button 
             onClick={() => { setActivo("notificaciones"); onNotificacionesClick?.(); }}
             className={`${base} ${activo === "notificaciones" ? seleccionado : normal}`}

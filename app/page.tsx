@@ -13,7 +13,6 @@ import Carrito from "./components/carrito";
 import Favorito from "./components/Favorito";
 import Reservas from "./components/Reservas";
 import Contactanos from "./components/Contactanos";
-import Cotizar from "./components/Cotizar";
 import Notificaciones from "./components/Notificaciones";
 import Buscar from "./components/Buscar";
 
@@ -51,7 +50,6 @@ export default function Home() {
       <Header 
         onReservasClick={() => setActiveView("reservas")} 
         onContactanosClick={() => setActiveView("contactanos")}
-        onCotizarClick={() => setActiveView("cotizar")}
         onNotificacionesClick={() => setActiveView("notificaciones")}
       />
 
@@ -86,9 +84,6 @@ export default function Home() {
 
         {/* 📞 CONTÁCTANOS */}
         {activeView === "contactanos" && <Contactanos />}
-
-        {/* 🧮 COTIZAR */}
-        {activeView === "cotizar" && <Cotizar />}
 
         {/* 🔔 NOTIFICACIONES */}
         {activeView === "notificaciones" && <Notificaciones />}
