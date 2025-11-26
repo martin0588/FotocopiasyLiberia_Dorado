@@ -5,27 +5,28 @@ export default function Contactanos() {
     {
       icon: MapPin,
       titulo: "Dirección",
-      contenido: "Av. Principal #123, Centro, La Paz",
+      contenido: "Calle Arturo Valle, entre Av. Sucre y Calle 13 de Septiembre, El Alto — La Paz",
     },
     {
       icon: Clock,
       titulo: "Horario de Atención",
-      contenido: "Lunes a Viernes: 8:00 - 19:00\nSábados: 9:00 - 18:00\nDomingos: 10:00 - 14:00",
+      contenido:
+        "Lunes a Viernes: 8:00 - 19:00\nSábados: 9:00 - 18:00\nDomingos: 10:00 - 14:00",
     },
     {
       icon: Phone,
       titulo: "Teléfono",
-      contenido: "+591 2-2345678",
+      contenido: "+591 75254197",
     },
     {
       icon: Mail,
       titulo: "Correo Electrónico",
-      contenido: "contacto@papeleriadroado.com",
+      contenido: "libreriadorado02@gmail.com",
     },
     {
       icon: MessageCircle,
       titulo: "WhatsApp",
-      contenido: "+591 70123456",
+      contenido: "+591 75254197",
     },
   ];
 
@@ -53,8 +54,12 @@ export default function Contactanos() {
                 <div key={i} className="px-4 py-3 flex gap-3">
                   <Icon size={20} className="text-amber-500 shrink-0 mt-0.5" />
                   <div>
-                    <p className="text-sm font-medium text-gray-800">{item.titulo}</p>
-                    <p className="text-sm text-gray-500 whitespace-pre-line">{item.contenido}</p>
+                    <p className="text-sm font-medium text-gray-800">
+                      {item.titulo}
+                    </p>
+                    <p className="text-sm text-gray-500 whitespace-pre-line">
+                      {item.contenido}
+                    </p>
                   </div>
                 </div>
               );
@@ -65,25 +70,50 @@ export default function Contactanos() {
         {/* Botones de acción */}
         <div className="space-y-3">
           {/* Llamar ahora */}
-          <button className="w-full bg-amber-500 hover:bg-amber-600 text-white font-medium py-3 rounded-xl flex items-center justify-center gap-2 transition-colors">
+          <button
+            onClick={() => (window.location.href = "tel:+59175254197")}
+            className="w-full bg-amber-500 hover:bg-amber-600 text-white font-medium py-3 rounded-xl flex items-center justify-center gap-2 transition-colors"
+          >
             <Phone size={20} />
             Llamar ahora
           </button>
 
           {/* WhatsApp */}
-          <button className="w-full bg-white hover:bg-gray-50 text-gray-800 font-medium py-3 rounded-xl border-2 border-amber-500 flex items-center justify-center gap-2 transition-colors">
+          <button
+            onClick={() =>
+              window.open(
+                "https://wa.me/59175254197?text=Hola%2C%20quisiera%20hacer%20una%20consulta",
+                "_blank"
+              )
+            }
+            className="w-full bg-white hover:bg-gray-50 text-gray-800 font-medium py-3 rounded-xl border-2 border-amber-500 flex items-center justify-center gap-2 transition-colors"
+          >
             <MessageCircle size={20} className="text-amber-500" />
             Escribir por WhatsApp
           </button>
 
           {/* Enviar correo */}
-          <button className="w-full bg-white hover:bg-gray-50 text-gray-600 font-medium py-3 rounded-xl border border-gray-200 flex items-center justify-center gap-2 transition-colors">
+          <button
+            onClick={() =>
+              (window.location.href =
+                "mailto:libreriadorado02@gmail.com?subject=Consulta&body=Hola%20quisiera%20más%20información")
+            }
+            className="w-full bg-white hover:bg-gray-50 text-gray-600 font-medium py-3 rounded-xl border border-gray-200 flex items-center justify-center gap-2 transition-colors"
+          >
             <Mail size={20} className="text-gray-400" />
             Enviar correo
           </button>
 
           {/* Ver en mapa */}
-          <button className="w-full bg-white hover:bg-gray-50 text-gray-600 font-medium py-3 rounded-xl border border-gray-200 flex items-center justify-center gap-2 transition-colors">
+          <button
+            onClick={() =>
+              window.open(
+                "https://maps.app.goo.gl/v85zny85UaxbtHkm8",
+                "_blank"
+              )
+            }
+            className="w-full bg-white hover:bg-gray-50 text-gray-600 font-medium py-3 rounded-xl border border-gray-200 flex items-center justify-center gap-2 transition-colors"
+          >
             <Map size={20} className="text-gray-400" />
             Ver en mapa
           </button>
@@ -95,7 +125,8 @@ export default function Contactanos() {
           <div>
             <p className="text-sm font-medium text-amber-800 mb-1">Ubicación</p>
             <p className="text-xs text-amber-700 leading-relaxed">
-              Estamos ubicados en el centro de La Paz, fácil acceso en transporte público. Te esperamos para brindarte la mejor atención.
+              Estamos ubicados en el centro de La Paz, fácil acceso en transporte
+              público. Te esperamos para brindarte la mejor atención.
             </p>
           </div>
         </div>
