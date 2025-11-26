@@ -187,9 +187,6 @@ export default function Buscar() {
         <button onClick={() => setMostrarFiltros(true)} className="flex items-center gap-2 px-4 py-2 border border-gray-200 rounded-lg text-sm text-gray-700 hover:bg-gray-50 transition-colors">
           <SlidersHorizontal size={16} />Filtros
         </button>
-        <button onClick={() => { setModoComparar(!modoComparar); setSeleccionados([]); }} className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${modoComparar ? "bg-amber-500 text-white" : "border border-gray-200 text-gray-700 hover:bg-gray-50"}`}>
-          <ArrowDownUp size={16} />Comparar
-        </button>
       </div>
 
       <div className="px-4 py-3">
