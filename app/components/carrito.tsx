@@ -1,34 +1,42 @@
 "use client";
 
 import { useCart } from "./CartContext";
-import { Minus, Plus, Trash2 } from "lucide-react";
+import { Minus, Plus, Trash2, Tag } from "lucide-react";
 import { useState } from "react";
-import { useReservas } from "./ReservasContext"; // ✅ usar contexto de reservas
+import { useReservas } from "./ReservasContext";
 
 export default function CarritoPage() {
   const { cart, addToCart, decreaseQty, removeFromCart, clearCart } = useCart();
-  const { agregarReserva } = useReservas(); // ✅ ahora reservas centralizadas
+  const { agregarReserva } = useReservas();
 
   const [tab, setTab] = useState("carrito");
   const [solicitudTexto, setSolicitudTexto] = useState("");
 
-  // ✅ price puede venir string => Number(...)
-  const total = cart.reduce(
+  // ✅ Calcular cantidad total de productos
+  const cantidadTotal = cart.reduce((sum, item) => sum + (item.qty || 1), 0);
+
+  // ✅ Determinar si aplica descuento
+  const aplicaDescuento = cantidadTotal >= 5;
+  const porcentajeDescuento = aplicaDescuento ? 5 : 0;
+
+  // ✅ Calcular subtotal (sin descuento)
+  const subtotal = cart.reduce(
     (sum, item) => sum + Number(item.price || 0) * (item.qty || 1),
     0
   );
 
-  // 👉 Crear reserva desde productos del carrito
+  // ✅ Calcular descuento
+  const descuento = aplicaDescuento ? subtotal * 0.05 : 0;
+
+  // ✅ Calcular total final
+  const total = subtotal - descuento;
+
   const generarReserva = () => {
     if (cart.length === 0) return;
-
-    // ✅ usar el context en vez de escribir directo localStorage
     agregarReserva(cart);
-
     clearCart();
   };
 
-  // 👉 Crear reserva desde el tab “Reservar”
   const generarSolicitudReserva = () => {
     if (!solicitudTexto.trim()) return;
 
@@ -37,7 +45,7 @@ export default function CarritoPage() {
         id: "SOLICITUD",
         title: "Solicitud personalizada",
         category: "Solicitud",
-        description: solicitudTexto, // ✅ usa description (tu app usa ese nombre)
+        description: solicitudTexto,
         qty: 1,
         price: 0,
         image: "",
@@ -46,12 +54,11 @@ export default function CarritoPage() {
     ];
 
     agregarReserva(solicitud);
-
     setSolicitudTexto("");
   };
 
   return (
-    <div className="px-4 py-4 max-w-xl mx-auto text-gray-900">
+    <div className="px-4 py-4 max-w-xl mx-auto text-gray-900 pb-20">
       <div className="flex items-center gap-2 mb-3">
         <span className="text-orange-600 text-xl">🛒</span>
         <h1 className="text-lg font-bold">Mi Carrito</h1>
@@ -81,6 +88,36 @@ export default function CarritoPage() {
       {/* TAB: CARRITO */}
       {tab === "carrito" && (
         <>
+          {/* 🎉 Banner de Descuento */}
+          {cantidadTotal >= 3 && cantidadTotal < 5 && (
+            <div className="bg-amber-50 border border-amber-200 rounded-xl p-3 mb-4 flex gap-3">
+              <Tag size={20} className="text-amber-500 shrink-0 mt-0.5" />
+              <div>
+                <p className="text-sm font-medium text-amber-800">
+                  ¡Casi ahí! 🎉
+                </p>
+                <p className="text-xs text-amber-700">
+                  Agrega {5 - cantidadTotal} producto{5 - cantidadTotal > 1 ? "s" : ""} más para obtener 5% de descuento
+                </p>
+              </div>
+            </div>
+          )}
+
+          {aplicaDescuento && (
+            <div className="bg-green-50 border border-green-200 rounded-xl p-3 mb-4 flex gap-3">
+              <Tag size={20} className="text-green-600 shrink-0 mt-0.5" />
+              <div>
+                <p className="text-sm font-medium text-green-800">
+                  ✅ Descuento Aplicado
+                </p>
+                <p className="text-xs text-green-700">
+                  Tienes {cantidadTotal} productos. ¡Disfrutá tu 5% de descuento!
+                </p>
+              </div>
+            </div>
+          )}
+
+          {/* Lista de productos */}
           <div className="space-y-4">
             {cart.map((item) => {
               const safePrice = Number(item.price || 0);
@@ -138,12 +175,34 @@ export default function CarritoPage() {
             })}
           </div>
 
+          {/* Resumen de compra */}
           {cart.length > 0 && (
             <div className="mt-6 bg-orange-50 rounded-xl p-4 shadow">
-              <p className="font-bold text-lg flex justify-between text-black">
-                <span>Total:</span>
-                <span>Bs. {total.toFixed(2)}</span>
-              </p>
+              <div className="space-y-2 mb-3">
+                <div className="flex justify-between text-sm text-gray-700">
+                  <span>Subtotal ({cantidadTotal} producto{cantidadTotal !== 1 ? "s" : ""}):</span>
+                  <span>Bs. {subtotal.toFixed(2)}</span>
+                </div>
+
+                {aplicaDescuento && (
+                  <div className="flex justify-between text-sm text-green-600 font-medium">
+                    <span>Descuento ({porcentajeDescuento}%):</span>
+                    <span>- Bs. {descuento.toFixed(2)}</span>
+                  </div>
+                )}
+
+                <div className="border-t border-orange-200 pt-2">
+                  <div className="flex justify-between text-lg font-bold text-black">
+                    <span>Total:</span>
+                    <span>Bs. {total.toFixed(2)}</span>
+                  </div>
+                  {aplicaDescuento && (
+                    <p className="text-xs text-green-600 text-right mt-1">
+                      Ahorraste Bs. {descuento.toFixed(2)}
+                    </p>
+                  )}
+                </div>
+              </div>
 
               <button
                 onClick={generarReserva}

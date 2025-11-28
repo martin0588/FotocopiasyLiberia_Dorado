@@ -9,19 +9,58 @@ import {
   X,
   Check
 } from "lucide-react";
+import type { Product } from "../types";
 
+// Interfaces
+interface BuscarItemProps {
+  product: Product;
+  onAddToCart: (id: string | number) => void;
+  onToggleFavorito: (id: string | number) => void;
+  modoComparar?: boolean;
+  seleccionado?: boolean;
+  onToggleComparar?: (id: string | number) => void;
+  isFavorito?: boolean;
+}
+
+interface BuscarListProps {
+  products: Product[];
+  onAddToCart: (id: string | number) => void;
+  onToggleFavorito: (id: string | number) => void;
+  modoComparar?: boolean;
+  seleccionados?: (string | number)[];
+  onToggleComparar?: (id: string | number) => void;
+  favoritos?: (string | number)[];
+}
+
+interface Filtros {
+  categorias: string[];
+  materiales: string[];
+  soloStock: boolean;
+}
+
+interface FiltrosModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  filtros: Filtros;
+  setFiltros: React.Dispatch<React.SetStateAction<Filtros>>;
+}
+
+interface BuscarProps {
+  products: Product[];
+}
+
+// Componente BuscarItem
 function BuscarItem({
   product,
   onAddToCart,
   onToggleFavorito,
-  modoComparar,
-  seleccionado,
+  modoComparar = false,
+  seleccionado = false,
   onToggleComparar,
-  isFavorito
-}) {
+  isFavorito = false
+}: BuscarItemProps) {
   const { id, image, title, category, description, price, isTop } = product;
-
-  const safePrice = Number(price); // ✅ por si price viene string
+  const safePrice = Number(price);
 
   return (
     <div className="bg-white rounded-xl border border-gray-200 p-3 flex gap-3 relative">
@@ -66,7 +105,7 @@ function BuscarItem({
           {!modoComparar && (
             <div className="flex items-center gap-2">
               <button
-                onClick={() => onToggleFavorito?.(id)}
+                onClick={() => onToggleFavorito(id)}
                 className="p-1.5 text-gray-400 hover:text-red-500 transition-colors"
               >
                 <Heart
@@ -76,7 +115,7 @@ function BuscarItem({
               </button>
 
               <button
-                onClick={() => onAddToCart?.(id)}
+                onClick={() => onAddToCart(id)}
                 className="bg-amber-500 hover:bg-amber-600 text-white rounded-lg p-2 transition-colors"
               >
                 <ShoppingCart size={16} />
@@ -89,15 +128,16 @@ function BuscarItem({
   );
 }
 
+// Componente BuscarList
 function BuscarList({
   products,
   onAddToCart,
   onToggleFavorito,
-  modoComparar,
-  seleccionados,
+  modoComparar = false,
+  seleccionados = [],
   onToggleComparar,
-  favoritos
-}) {
+  favoritos = []
+}: BuscarListProps) {
   if (!products || products.length === 0) {
     return (
       <div className="text-center py-12">
@@ -116,16 +156,17 @@ function BuscarList({
           onAddToCart={onAddToCart}
           onToggleFavorito={onToggleFavorito}
           modoComparar={modoComparar}
-          seleccionado={seleccionados?.includes(product.id)}
+          seleccionado={seleccionados.includes(product.id)}
           onToggleComparar={onToggleComparar}
-          isFavorito={favoritos?.includes(product.id)}
+          isFavorito={favoritos.includes(product.id)}
         />
       ))}
     </div>
   );
 }
 
-function FiltrosModal({ isOpen, onClose, filtros, setFiltros }) {
+// Componente FiltrosModal
+function FiltrosModal({ isOpen, onClose, filtros, setFiltros }: FiltrosModalProps) {
   const categorias = [
     "Cuadernos",
     "Papel",
@@ -157,13 +198,17 @@ function FiltrosModal({ isOpen, onClose, filtros, setFiltros }) {
     "Organizadores"
   ];
 
-  const toggleFiltro = (tipo, valor) => {
-    setFiltros((prev) => ({
-      ...prev,
-      [tipo]: prev[tipo]?.includes(valor)
-        ? prev[tipo].filter((v) => v !== valor)
-        : [...(prev[tipo] || []), valor]
-    }));
+  const toggleFiltro = (tipo: keyof Filtros, valor: string) => {
+    setFiltros((prev) => {
+      if (tipo === "soloStock") return prev;
+      
+      return {
+        ...prev,
+        [tipo]: prev[tipo].includes(valor)
+          ? prev[tipo].filter((v) => v !== valor)
+          : [...prev[tipo], valor]
+      };
+    });
   };
 
   const limpiarFiltros = () =>
@@ -192,7 +237,7 @@ function FiltrosModal({ isOpen, onClose, filtros, setFiltros }) {
                 <label key={cat} className="flex items-center gap-2 cursor-pointer">
                   <input
                     type="checkbox"
-                    checked={filtros.categorias?.includes(cat)}
+                    checked={filtros.categorias.includes(cat)}
                     onChange={() => toggleFiltro("categorias", cat)}
                     className="w-4 h-4 rounded border-gray-300 text-amber-500 focus:ring-amber-500"
                   />
@@ -209,7 +254,7 @@ function FiltrosModal({ isOpen, onClose, filtros, setFiltros }) {
                 <label key={mat} className="flex items-center gap-2 cursor-pointer">
                   <input
                     type="checkbox"
-                    checked={filtros.materiales?.includes(mat)}
+                    checked={filtros.materiales.includes(mat)}
                     onChange={() => toggleFiltro("materiales", mat)}
                     className="w-4 h-4 rounded border-gray-300 text-amber-500 focus:ring-amber-500"
                   />
@@ -251,22 +296,21 @@ function FiltrosModal({ isOpen, onClose, filtros, setFiltros }) {
   );
 }
 
-export default function Buscar({ products = [] }) {
+// Componente Principal Buscar
+export default function Buscar({ products = [] }: BuscarProps) {
   const [query, setQuery] = useState("");
   const [busqueda, setBusqueda] = useState("");
   const [mostrarFiltros, setMostrarFiltros] = useState(false);
-  /** @type {[Array<string | number>, Function]} */
-  const [seleccionados, setSeleccionados] = useState([])
-  /** @type {[Array<string | number>, Function]} */
-  const [favoritos, setFavoritos] = useState([]);
+  const [seleccionados, setSeleccionados] = useState<(string | number)[]>([]);
+  const [favoritos, setFavoritos] = useState<(string | number)[]>([]);
 
-  const [filtros, setFiltros] = useState({
+  const [filtros, setFiltros] = useState<Filtros>({
     categorias: [],
     materiales: [],
     soloStock: false
   });
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setBusqueda(query.trim());
   };
@@ -289,14 +333,14 @@ export default function Buscar({ products = [] }) {
     });
   }, [products, busqueda, filtros.categorias]);
 
-  const handleToggleFavorito = (id) =>
+  const handleToggleFavorito = (id: string | number) =>
     setFavoritos((prev) =>
       prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id]
     );
 
-  const handleAddToCart = (id) => console.log("Agregado al carrito:", id);
+  const handleAddToCart = (id: string | number) => console.log("Agregado al carrito:", id);
 
-  const handleToggleComparar = (id) =>
+  const handleToggleComparar = (id: string | number) =>
     setSeleccionados((prev) =>
       prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id]
     );
