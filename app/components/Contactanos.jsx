@@ -93,16 +93,19 @@ export default function Contactanos() {
           </button>
 
           {/* Enviar correo */}
-          <button
+           <button
             onClick={() =>
-              (window.location.href =
-                "mailto:libreriadorado02@gmail.com?subject=Consulta&body=Hola%20quisiera%20más%20información")
+              window.open(
+                "https://mail.google.com/mail/?view=cm&fs=1&to=libreriadorado02@gmail.com&su=Consulta&body=Hola%20quisiera%20más%20información",
+                "_blank"
+              )
             }
             className="w-full bg-white hover:bg-gray-50 text-gray-600 font-medium py-3 rounded-xl border border-gray-200 flex items-center justify-center gap-2 transition-colors"
           >
             <Mail size={20} className="text-gray-400" />
             Enviar correo
           </button>
+            
 
           {/* Ver en mapa */}
           <button
