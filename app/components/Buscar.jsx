@@ -255,9 +255,11 @@ export default function Buscar({ products = [] }) {
   const [query, setQuery] = useState("");
   const [busqueda, setBusqueda] = useState("");
   const [mostrarFiltros, setMostrarFiltros] = useState(false);
-  const [seleccionados, setSeleccionados] = useState([]);
+  /** @type {[Array<string | number>, Function]} */
+  const [seleccionados, setSeleccionados] = useState([])
+  /** @type {[Array<string | number>, Function]} */
   const [favoritos, setFavoritos] = useState([]);
-  const [modoComparar, setModoComparar] = useState(false); // ✅ antes no existía
+
   const [filtros, setFiltros] = useState({
     categorias: [],
     materiales: [],
@@ -331,9 +333,6 @@ export default function Buscar({ products = [] }) {
           <SlidersHorizontal size={16} />
           Filtros
         </button>
-
-        {/* Si luego quieres activar comparación, ya tienes modoComparar listo */}
-        {/* <button onClick={() => setModoComparar(!modoComparar)}>Comparar</button> */}
       </div>
 
       <div className="px-4 py-3">
@@ -347,7 +346,6 @@ export default function Buscar({ products = [] }) {
           products={productosFiltrados}
           onAddToCart={handleAddToCart}
           onToggleFavorito={handleToggleFavorito}
-          modoComparar={modoComparar}
           seleccionados={seleccionados}
           onToggleComparar={handleToggleComparar}
           favoritos={favoritos}
