@@ -1,5 +1,5 @@
 export interface Product {
-  id: number;
+  id: string | number;
   title: string;
   category: string;
   description: string;
@@ -7,3 +7,4 @@ export interface Product {
   image: string;
   isTop: boolean;
 }
+
