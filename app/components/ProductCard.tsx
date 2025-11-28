@@ -92,10 +92,11 @@ const ProductCard: React.FC<ProductCardProps> = ({
       />
 
       {/* Categoría */}
-      <p className="text-gray-500 text-xs mb-1">{category}</p>
+      <p className="text-gray-700 text-xs mb-1">{category}</p>
+
 
       {/* Texto */}
-      <h3 className="text-sm font-semibold">{title}</h3>
+      <h3 className="text-sm font-semibold text-gray-900">{title}</h3>
       <p className="text-sm text-gray-600">{description}</p>
 
       {/* Precio + carrito */}
