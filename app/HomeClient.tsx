@@ -64,7 +64,6 @@ export default function HomeClient({ products }: { products: Product[] }) {
         )}
 
         {activeView === "search" && <Buscar products={products} />}
-
         {activeView === "cart" && <Carrito />}
         {activeView === "favorito" && <Favorito />}
         {activeView === "reservas" && <Reservas />}
