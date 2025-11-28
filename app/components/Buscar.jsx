@@ -1,9 +1,8 @@
-// ...existing code...
 "use client";
 
 import { useState } from "react";
 import { Search, SlidersHorizontal, ArrowDownUp, Heart, ShoppingCart, X, Check } from "lucide-react";
-import { products } from "../data/products";
+
 
 function BuscarItem({ product, onAddToCart, onToggleFavorito, modoComparar, seleccionado, onToggleComparar, isFavorito }) {
   const { id, image, title, category, description, price, isTop } = product;
@@ -141,7 +140,6 @@ export default function Buscar() {
   const [query, setQuery] = useState("");
   const [busqueda, setBusqueda] = useState("");
   const [mostrarFiltros, setMostrarFiltros] = useState(false);
-  const [modoComparar, setModoComparar] = useState(false);
   const [seleccionados, setSeleccionados] = useState([]);
   const [favoritos, setFavoritos] = useState([]);
   const [filtros, setFiltros] = useState({ categorias: [], materiales: [], soloStock: false });
