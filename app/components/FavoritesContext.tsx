@@ -39,8 +39,8 @@ export function FavoritesProvider({ children }: { children: React.ReactNode }) {
   const toggleFavorite = (p: Producto) => {
     setFavorites((prev) =>
       prev.some((f) => f.id === p.id)
-        ? prev.filter((f) => f.id !== p.id) // quitar
-        : [...prev, p] // agregar
+        ? prev.filter((f) => f.id !== p.id) 
+        : [...prev, p] 
     );
   };
 
