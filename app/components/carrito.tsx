@@ -3,65 +3,51 @@
 import { useCart } from "./CartContext";
 import { Minus, Plus, Trash2 } from "lucide-react";
 import { useState } from "react";
+import { useReservas } from "./ReservasContext"; // ✅ usar contexto de reservas
 
 export default function CarritoPage() {
   const { cart, addToCart, decreaseQty, removeFromCart, clearCart } = useCart();
+  const { agregarReserva } = useReservas(); // ✅ ahora reservas centralizadas
+
   const [tab, setTab] = useState("carrito");
   const [solicitudTexto, setSolicitudTexto] = useState("");
 
-  const total = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
+  // ✅ price puede venir string => Number(...)
+  const total = cart.reduce(
+    (sum, item) => sum + Number(item.price || 0) * (item.qty || 1),
+    0
+  );
 
   // 👉 Crear reserva desde productos del carrito
   const generarReserva = () => {
     if (cart.length === 0) return;
 
-    const reservasGuardadas = JSON.parse(localStorage.getItem("reservas") || "[]");
-
-    const nuevaReserva = {
-      id: `RES-${String(reservasGuardadas.length + 1).padStart(3, "0")}`,
-      fecha: new Date().toLocaleDateString(),
-      productos: cart,
-      total,
-      estado: "Reservado",
-      lugar: "Papelería DORADO",
-      direccion: "Av. Principal #123, Centro, La Paz",
-    };
-
-    reservasGuardadas.push(nuevaReserva);
-    localStorage.setItem("reservas", JSON.stringify(reservasGuardadas));
+    // ✅ usar el context en vez de escribir directo localStorage
+    agregarReserva(cart);
 
     clearCart();
-    // ❌ Ya no redirige
   };
 
   // 👉 Crear reserva desde el tab “Reservar”
   const generarSolicitudReserva = () => {
     if (!solicitudTexto.trim()) return;
 
-    const reservasGuardadas = JSON.parse(localStorage.getItem("reservas") || "[]");
+    const solicitud = [
+      {
+        id: "SOLICITUD",
+        title: "Solicitud personalizada",
+        category: "Solicitud",
+        description: solicitudTexto, // ✅ usa description (tu app usa ese nombre)
+        qty: 1,
+        price: 0,
+        image: "",
+        isTop: false
+      }
+    ];
 
-    const nuevaReserva = {
-      id: `RES-${String(reservasGuardadas.length + 1).padStart(3, "0")}`,
-      fecha: new Date().toLocaleDateString(),
-      productos: [
-        {
-          title: "Solicitud personalizada",
-          qty: 1,
-          price: 0,
-          descripcion: solicitudTexto,
-        },
-      ],
-      total: 0,
-      estado: "Solicitud",
-      lugar: "Papelería DORADO",
-      direccion: "Av. Principal #123, Centro, La Paz",
-    };
-
-    reservasGuardadas.push(nuevaReserva);
-    localStorage.setItem("reservas", JSON.stringify(reservasGuardadas));
+    agregarReserva(solicitud);
 
     setSolicitudTexto("");
-    // ❌ Ya no redirige tampoco
   };
 
   return (
@@ -96,54 +82,60 @@ export default function CarritoPage() {
       {tab === "carrito" && (
         <>
           <div className="space-y-4">
-            {cart.map((item) => (
-              <div
-                key={item.id}
-                className="flex items-center bg-white p-3 rounded-xl shadow"
-              >
-                <img
-                  src={item.image}
-                  className="w-16 h-16 rounded-lg object-cover"
-                />
+            {cart.map((item) => {
+              const safePrice = Number(item.price || 0);
+              const qty = item.qty || 1;
 
-                <div className="ml-3 flex-1">
-                  <h3 className="font-semibold text-sm text-black">
-                    {item.title}
-                  </h3>
-                  <p className="text-xs text-gray-600">{item.category}</p>
+              return (
+                <div
+                  key={item.id}
+                  className="flex items-center bg-white p-3 rounded-xl shadow"
+                >
+                  <img
+                    src={item.image}
+                    className="w-16 h-16 rounded-lg object-cover"
+                    alt={item.title}
+                  />
 
-                  <div className="flex items-center gap-2 mt-2">
+                  <div className="ml-3 flex-1">
+                    <h3 className="font-semibold text-sm text-black">
+                      {item.title}
+                    </h3>
+                    <p className="text-xs text-gray-600">{item.category}</p>
+
+                    <div className="flex items-center gap-2 mt-2">
+                      <button
+                        onClick={() => decreaseQty(item.id)}
+                        className="bg-gray-200 text-gray-700 w-7 h-7 rounded-full flex items-center justify-center"
+                      >
+                        <Minus size={14} />
+                      </button>
+
+                      <span className="font-semibold">{qty}</span>
+
+                      <button
+                        onClick={() => addToCart(item)}
+                        className="bg-gray-200 text-gray-700 w-7 h-7 rounded-full flex items-center justify-center"
+                      >
+                        <Plus size={14} />
+                      </button>
+                    </div>
+                  </div>
+
+                  <div className="flex flex-col items-end gap-2">
+                    <p className="font-semibold text-sm text-black">
+                      Bs. {(safePrice * qty).toFixed(2)}
+                    </p>
                     <button
-                      onClick={() => decreaseQty(item.id)}
-                      className="bg-gray-200 text-gray-700 w-7 h-7 rounded-full flex items-center justify-center"
+                      onClick={() => removeFromCart(item.id)}
+                      className="text-red-500"
                     >
-                      <Minus size={14} />
-                    </button>
-
-                    <span className="font-semibold">{item.qty}</span>
-
-                    <button
-                      onClick={() => addToCart({ ...item, qty: 1 })}
-                      className="bg-gray-200 text-gray-700 w-7 h-7 rounded-full flex items-center justify-center"
-                    >
-                      <Plus size={14} />
+                      <Trash2 size={18} />
                     </button>
                   </div>
                 </div>
-
-                <div className="flex flex-col items-end gap-2">
-                  <p className="font-semibold text-sm text-black">
-                    Bs. {(item.price * item.qty).toFixed(2)}
-                  </p>
-                  <button
-                    onClick={() => removeFromCart(item.id)}
-                    className="text-red-500"
-                  >
-                    <Trash2 size={18} />
-                  </button>
-                </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
 
           {cart.length > 0 && (

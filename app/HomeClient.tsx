@@ -43,7 +43,6 @@ export default function HomeClient({ products }: { products: Product[] }) {
 
   return (
     <div className="">
-
       <Header 
         onReservasClick={() => setActiveView("reservas")} 
         onContactanosClick={() => setActiveView("contactanos")}
@@ -60,18 +59,16 @@ export default function HomeClient({ products }: { products: Product[] }) {
       )}
 
       <main className={activeView === "home" ? "px-4 py-4" : ""}>
-
         {activeView === "home" && (
           <ProductsGrid products={filteredProducts} />
         )}
 
-        {activeView === "search" && <Buscar />}
+        {activeView === "search" && <Buscar products={products} />}
         {activeView === "cart" && <Carrito />}
         {activeView === "favorito" && <Favorito />}
         {activeView === "reservas" && <Reservas />}
         {activeView === "contactanos" && <Contactanos />}
         {activeView === "notificaciones" && <Notificaciones />}
-
       </main>
 
       <BottomNav
